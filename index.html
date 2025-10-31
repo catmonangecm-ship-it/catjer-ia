@@ -398,6 +398,7 @@
         function getResp(txt) {
             const low = txt.toLowerCase();
             
+            // Agent K
             if (low.includes('agent k')) {
                 return '<strong>🕴️ AGENT K ACTIVE</strong><br><br>' +
                     'Connexion etablie avec Agent K<br><br>' +
@@ -409,53 +410,147 @@
                     '🚀 AGENT K OPERATIONNEL !';
             }
             
-            if (low.includes('x-ray')) {
+            // X-ray
+            if (low.includes('x-ray') || low.includes('xray')) {
                 return '<strong>🔬 X-RAY API CONNECTEE</strong><br><br>' +
                     'Acces a l\'API X-ray<br><br>' +
                     '<strong>Fonctionnalites :</strong><br>' +
-                    '• Analyse de donnees<br>' +
+                    '• Analyse de donnees en profondeur<br>' +
                     '• Detection de patterns<br>' +
                     '• Tracage et monitoring<br>' +
-                    '• Visualisation<br><br>' +
+                    '• Visualisation avancee<br><br>' +
                     '🔥 API X-RAY PRETE !';
             }
             
+            // Questions "Qui est"
+            if (low.includes('qui est')) {
+                const name = txt.replace(/qui est|qui|est|\?/gi, '').trim();
+                return '<strong>🔍 RECHERCHE EN COURS...</strong><br><br>' +
+                    'Recherche d\'informations sur : <strong>' + name + '</strong><br><br>' +
+                    'Je cherche sur Wikipedia, REST Countries et autres sources...<br><br>' +
+                    '💡 Pour une recherche complete, connectez-moi a Internet !';
+            }
+            
+            // Python
+            if (low.includes('python') || low.includes('fibonacci')) {
+                return '<strong>🐍 CODE PYTHON - FIBONACCI</strong><br><br>' +
+                    '<div style="background:#1e1e1e;color:#4ec9b0;padding:15px;border-radius:10px;font-family:monospace;text-align:left;margin:10px 0">' +
+                    '<span style="color:#c586c0">def</span> <span style="color:#dcdcaa">fibonacci</span>(<span style="color:#9cdcfe">n</span>):<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6a9955">"""Genere la suite de Fibonacci"""</span><br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe">a</span>, <span style="color:#9cdcfe">b</span> = <span style="color:#b5cea8">0</span>, <span style="color:#b5cea8">1</span><br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe">result</span> = []<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c586c0">for</span> <span style="color:#9cdcfe">_</span> <span style="color:#c586c0">in</span> <span style="color:#dcdcaa">range</span>(<span style="color:#9cdcfe">n</span>):<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe">result</span>.<span style="color:#dcdcaa">append</span>(<span style="color:#9cdcfe">a</span>)<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe">a</span>, <span style="color:#9cdcfe">b</span> = <span style="color:#9cdcfe">b</span>, <span style="color:#9cdcfe">a</span> + <span style="color:#9cdcfe">b</span><br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c586c0">return</span> <span style="color:#9cdcfe">result</span><br><br>' +
+                    '<span style="color:#6a9955"># Utilisation</span><br>' +
+                    '<span style="color:#dcdcaa">print</span>(<span style="color:#dcdcaa">fibonacci</span>(<span style="color:#b5cea8">10</span>))<br>' +
+                    '<span style="color:#6a9955"># Resultat: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</span>' +
+                    '</div>' +
+                    '✅ Code Python complet avec coloration syntaxique !';
+            }
+            
+            // JavaScript
+            if (low.includes('javascript') || low.includes('js')) {
+                return '<strong>⚡ CODE JAVASCRIPT</strong><br><br>' +
+                    '<div style="background:#1e1e1e;color:#4ec9b0;padding:15px;border-radius:10px;font-family:monospace;text-align:left;margin:10px 0">' +
+                    '<span style="color:#6a9955">// Fonction de tri avancee</span><br>' +
+                    '<span style="color:#c586c0">function</span> <span style="color:#dcdcaa">trierTableau</span>(<span style="color:#9cdcfe">arr</span>) {<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c586c0">return</span> <span style="color:#9cdcfe">arr</span>.<span style="color:#dcdcaa">sort</span>((<span style="color:#9cdcfe">a</span>, <span style="color:#9cdcfe">b</span>) <span style="color:#c586c0">=></span> <span style="color:#9cdcfe">a</span> - <span style="color:#9cdcfe">b</span>);<br>' +
+                    '}<br><br>' +
+                    '<span style="color:#6a9955">// Exemple</span><br>' +
+                    '<span style="color:#c586c0">const</span> <span style="color:#9cdcfe">nombres</span> = [<span style="color:#b5cea8">5</span>, <span style="color:#b5cea8">2</span>, <span style="color:#b5cea8">8</span>, <span style="color:#b5cea8">1</span>, <span style="color:#b5cea8">9</span>];<br>' +
+                    '<span style="color:#9cdcfe">console</span>.<span style="color:#dcdcaa">log</span>(<span style="color:#dcdcaa">trierTableau</span>(<span style="color:#9cdcfe">nombres</span>));<br>' +
+                    '<span style="color:#6a9955">// [1, 2, 5, 8, 9]</span>' +
+                    '</div>' +
+                    '✅ Code JavaScript pret a utiliser !';
+            }
+            
+            // Calculs
+            if (/^\d+\s*[\+\-\*\/]\s*\d+/.test(txt)) {
+                try {
+                    const result = eval(txt);
+                    return '<strong>🧮 CALCULATRICE</strong><br><br>' +
+                        '<div style="font-size:1.5rem;background:rgba(0,255,0,0.2);padding:20px;border-radius:10px;margin:10px 0">' +
+                        txt + ' = <strong style="color:#00ff00">' + result + '</strong>' +
+                        '</div>' +
+                        '✅ Calcul effectue avec succes !';
+                } catch(e) {
+                    return '❌ Erreur dans le calcul';
+                }
+            }
+            
+            // Super App
             if (low.includes('super') || low.includes('app')) {
-                return '<strong>⚡ SUPER PROGRAMME</strong><br><br>Application generee !<br>' +
-                    '<button class="exec-btn" onclick="openApp()">▶️ LANCER</button>';
+                return '<strong>⚡ SUPER PROGRAMME</strong><br><br>Application complete generee !<br>' +
+                    '<button class="exec-btn" onclick="openApp()">▶️ LANCER L\'APPLICATION</button>';
             }
             
-            if (low.includes('dashboard')) {
-                return '<strong>📊 DASHBOARD PRO</strong><br><br>Tableau de bord cree !<br>' +
-                    '<button class="exec-btn" onclick="openDash()">▶️ OUVRIR</button>';
+            // Dashboard
+            if (low.includes('dashboard') || low.includes('tableau')) {
+                return '<strong>📊 DASHBOARD PRO</strong><br><br>Tableau de bord professionnel cree !<br>' +
+                    '<button class="exec-btn" onclick="openDash()">▶️ OUVRIR LE DASHBOARD</button>';
             }
             
+            // Site web
             if (low.includes('site') || low.includes('web')) {
-                return '<strong>🌐 SITE WEB</strong><br><br>Site genere !<br>' +
-                    '<button class="exec-btn" onclick="openSite()">▶️ VOIR</button>';
+                return '<strong>🌐 SITE WEB</strong><br><br>Site web complet genere !<br>' +
+                    '<button class="exec-btn" onclick="openSite()">▶️ VOIR LE SITE</button>';
             }
             
-            if (low.includes('python')) {
-                return '<strong>🐍 CODE PYTHON</strong><br><br>' +
-                    'def fibonacci(n):<br>' +
-                    '&nbsp;&nbsp;&nbsp;&nbsp;a, b = 0, 1<br>' +
-                    '&nbsp;&nbsp;&nbsp;&nbsp;result = []<br>' +
-                    '&nbsp;&nbsp;&nbsp;&nbsp;for _ in range(n):<br>' +
-                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(a)<br>' +
-                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a, b = b, a + b<br>' +
-                    '&nbsp;&nbsp;&nbsp;&nbsp;return result<br><br>' +
-                    '🔥 CODE PRET !';
+            // Calculatrice
+            if (low.includes('calculatrice') || low.includes('calc')) {
+                return '<strong>🧮 CALCULATRICE</strong><br><br>Calculatrice interactive creee !<br>' +
+                    '<button class="exec-btn" onclick="openCalc()">▶️ OUVRIR CALCULATRICE</button>';
             }
             
+            // Jeu
+            if (low.includes('jeu') || low.includes('game')) {
+                return '<strong>🎮 JEU INTERACTIF</strong><br><br>Jeu de clics cree !<br>' +
+                    '<button class="exec-btn" onclick="openGame()">▶️ JOUER MAINTENANT</button>';
+            }
+            
+            // Aide
+            if (low.includes('aide') || low.includes('help')) {
+                return '<strong>📖 AIDE - ASSISTANT IA</strong><br><br>' +
+                    '<strong>Je peux :</strong><br>' +
+                    '• Repondre a vos questions<br>' +
+                    '• Generer du code (Python, JS, HTML)<br>' +
+                    '• Faire des calculs (ex: 25 * 48)<br>' +
+                    '• Creer des applications completes<br>' +
+                    '• Activer les APIs X-ray et Agent K<br><br>' +
+                    '<strong>Exemples :</strong><br>' +
+                    '- "Code Python Fibonacci"<br>' +
+                    '- "Cree une calculatrice"<br>' +
+                    '- "125 + 456"<br>' +
+                    '- "Agent K"<br>' +
+                    '- "Super App"';
+            }
+            
+            // Salutations
+            if (low.includes('bonjour') || low.includes('salut') || low.includes('hello')) {
+                return '<strong>👋 SALUT !</strong><br><br>' +
+                    'Je suis ton Assistant IA en mode FIRE 🔥<br><br>' +
+                    'Pose-moi tes questions ou clique sur les boutons !';
+            }
+            
+            if (low.includes('merci')) {
+                return '<strong>😊 DE RIEN !</strong><br><br>' +
+                    'Je suis la pour t\'aider !';
+            }
+            
+            // Réponse par défaut
             return '<strong>🔥 ASSISTANT IA FIRE MODE</strong><br><br>' +
-                'APIs disponibles :<br>' +
+                '<strong>APIs disponibles :</strong><br>' +
                 '🔬 X-ray API<br>' +
                 '🕴️ Agent K<br><br>' +
-                'Je peux creer :<br>' +
+                '<strong>Je peux creer :</strong><br>' +
                 '⚡ Super programmes<br>' +
                 '📊 Dashboards<br>' +
                 '🌐 Sites web<br>' +
-                '💻 Code avance';
+                '💻 Code (Python, JS, HTML)<br>' +
+                '🧮 Calculer des expressions<br><br>' +
+                '💡 Essaie : "Code Python", "125 * 8", "Cree un jeu"';
         }
 
         function openApp() {
