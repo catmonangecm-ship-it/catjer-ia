@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant IA - FIRE MODE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a0000 50%, #330000 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animation de feu en arrière-plan */
+        @keyframes fire {
+            0%, 100% { 
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg);
+            }
+            50% { 
+                background-position: 100% 50%;
+                filter: hue-rotate(30deg);
+            }
+        }
+
+        .fire-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 69, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.2) 0%, transparent 50%);
+            animation: fire 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header avec effet de feu */
+        .header {
+            background: linear-gradient(180deg, rgba(255, 0, 0, 0.8) 0%, rgba(139, 0, 0, 0.8) 100%);
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(255, 0, 0, 0.5);
+            border-bottom: 3px solid #ff4500;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 10px 50px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 10px 80px rgba(255, 69, 0, 0.8); }
+        }
+
+        .logo {
+            font-size: 3rem;
+            text-shadow: 
+                0 0 10px #ff0000,
+                0 0 20px #ff4500,
+                0 0 30px #ff6600,
+                0 0 40px #ff8800;
+            animation: flicker 1.5s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            background: linear-gradient(90deg, #ff0000, #ff8800, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #ffaa00;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.8);
+        }
+
+        /* Boutons d'action rapide */
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .fire-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ff0000, #ff4500, #ff8800);
+            border: 3px solid #ff4500;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 25px rgba(255, 69, 0, 0.6);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .fire-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 40px rgba(255, 69, 0, 1);
+            background: linear-gradient(135deg, #ff4500, #ff8800, #ffaa00);
+        }
+
+        .fire-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Zone de chat */
+        .chat {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .message {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex-shrink: 0;
+            border: 3px solid;
+            box-shadow: 0 0 20px;
+        }
+
+        .avatar-bot {
+            background: linear-gradient(135deg, #ff0000, #ff4500);
+            border-color: #ff8800;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.8);
+        }
+
+        .avatar-user {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+        .bubble {
+            padding: 20px 25px;
+            border-radius: 20px;
+            max-width: 70%;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .bubble-bot {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(139, 0, 0, 0.3));
+            border: 2px solid rgba(255, 69, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .bubble-user {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 139, 0, 0.3));
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .typing {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+        }
+
+        .typing-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff4500;
+            animation: bounce 1.4s infinite;
+            box-shadow: 0 0 10px #ff4500;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-20px); }
+        }
+
+        /* Zone de saisie */
+        .input-area {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 25px;
+            border-top: 3px solid #ff4500;
+            box-shadow: 0 -10px 50px rgba(255, 69, 0, 0.3);
+        }
+
+        .input-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        #msg {
+            flex: 1;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid #ff4500;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        #msg:focus {
+            outline: none;
+            border-color: #ff8800;
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.8);
+        }
+
+        #msg::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .send-btn {
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #ff0000, #ff4500, #ff8800);
+            border: 3px solid #ff4500;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 25px rgba(255, 69, 0, 0.6);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(255, 69, 0, 1);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .exec-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0, 255, 0, 0.6);
+        }
+
+        .exec-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 255, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="fire-bg"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🔥</div>
+            <h1>ASSISTANT IA - FIRE MODE</h1>
+            <p class="tagline">X-RAY • AGENT K • SUPER PUISSANCE</p>
+        </div>
+
+        <div class="quick-actions">
+            <button class="fire-btn" onclick="send('Agent K')">🕴️ AGENT K</button>
+            <button class="fire-btn" onclick="send('X-ray')">🔬 X-RAY</button>
+            <button class="fire-btn" onclick="send('Super App')">⚡ SUPER APP</button>
+            <button class="fire-btn" onclick="send('Dashboard')">📊 DASHBOARD</button>
+            <button class="fire-btn" onclick="send('Site web')">🌐 SITE WEB</button>
+            <button class="fire-btn" onclick="send('Python')">🐍 PYTHON</button>
+        </div>
+
+        <div class="chat" id="chat">
+            <div class="message">
+                <div class="avatar avatar-bot">🤖</div>
+                <div class="bubble bubble-bot">
+                    <strong>🔥 BIENVENUE DANS LE FIRE MODE 🔥</strong><br><br>
+                    <strong>APIs connectees :</strong><br>
+                    🔬 X-ray API - Analyse avancee<br>
+                    🕴️ Agent K - Intelligence artificielle<br>
+                    🌐 Wikipedia, REST Countries, Open Library<br><br>
+                    <strong>Je peux creer :</strong><br>
+                    ⚡ Super programmes<br>
+                    📊 Dashboards<br>
+                    🌐 Sites web<br>
+                    💻 Code avance<br><br>
+                    <strong>CLIQUE SUR LES BOUTONS OU POSE TES QUESTIONS !</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="msg" placeholder="Tape ton message ici...">
+                <button class="send-btn" onclick="sendMsg()">🚀 ENVOYER</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function add(role, txt) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = 'message' + (role === 'user' ? ' user' : '');
+            div.innerHTML = '<div class="avatar avatar-' + (role === 'user' ? 'user' : 'bot') + '">' +
+                (role === 'user' ? '👤' : '🤖') + '</div>' +
+                '<div class="bubble bubble-' + (role === 'user' ? 'user' : 'bot') + '">' + txt + '</div>';
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function typing() {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = 'message';
+            div.id = 'typing';
+            div.innerHTML = '<div class="avatar avatar-bot">🤖</div>' +
+                '<div class="bubble bubble-bot typing">' +
+                '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function hideTyping() {
+            const t = document.getElementById('typing');
+            if (t) t.remove();
+        }
+
+        function sendMsg() {
+            const input = document.getElementById('msg');
+            const txt = input.value.trim();
+            if (!txt) return;
+            add('user', txt);
+            input.value = '';
+            typing();
+            setTimeout(function() {
+                hideTyping();
+                add('assistant', getResp(txt));
+            }, 1000);
+        }
+
+        function send(txt) {
+            document.getElementById('msg').value = txt;
+            sendMsg();
+        }
+
+        function getResp(txt) {
+            const low = txt.toLowerCase();
+            
+            if (low.includes('agent k')) {
+                return '<strong>🕴️ AGENT K ACTIVE</strong><br><br>' +
+                    'Connexion etablie avec Agent K<br><br>' +
+                    '<strong>Capacites :</strong><br>' +
+                    '• Intelligence artificielle avancee<br>' +
+                    '• Apprentissage automatique<br>' +
+                    '• Analyse predictive<br>' +
+                    '• Vision par ordinateur<br><br>' +
+                    '🚀 AGENT K OPERATIONNEL !';
+            }
+            
+            if (low.includes('x-ray')) {
+                return '<strong>🔬 X-RAY API CONNECTEE</strong><br><br>' +
+                    'Acces a l\'API X-ray<br><br>' +
+                    '<strong>Fonctionnalites :</strong><br>' +
+                    '• Analyse de donnees<br>' +
+                    '• Detection de patterns<br>' +
+                    '• Tracage et monitoring<br>' +
+                    '• Visualisation<br><br>' +
+                    '🔥 API X-RAY PRETE !';
+            }
+            
+            if (low.includes('super') || low.includes('app')) {
+                return '<strong>⚡ SUPER PROGRAMME</strong><br><br>Application generee !<br>' +
+                    '<button class="exec-btn" onclick="openApp()">▶️ LANCER</button>';
+            }
+            
+            if (low.includes('dashboard')) {
+                return '<strong>📊 DASHBOARD PRO</strong><br><br>Tableau de bord cree !<br>' +
+                    '<button class="exec-btn" onclick="openDash()">▶️ OUVRIR</button>';
+            }
+            
+            if (low.includes('site') || low.includes('web')) {
+                return '<strong>🌐 SITE WEB</strong><br><br>Site genere !<br>' +
+                    '<button class="exec-btn" onclick="openSite()">▶️ VOIR</button>';
+            }
+            
+            if (low.includes('python')) {
+                return '<strong>🐍 CODE PYTHON</strong><br><br>' +
+                    'def fibonacci(n):<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;a, b = 0, 1<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;result = []<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;for _ in range(n):<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(a)<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a, b = b, a + b<br>' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;return result<br><br>' +
+                    '🔥 CODE PRET !';
+            }
+            
+            return '<strong>🔥 ASSISTANT IA FIRE MODE</strong><br><br>' +
+                'APIs disponibles :<br>' +
+                '🔬 X-ray API<br>' +
+                '🕴️ Agent K<br><br>' +
+                'Je peux creer :<br>' +
+                '⚡ Super programmes<br>' +
+                '📊 Dashboards<br>' +
+                '🌐 Sites web<br>' +
+                '💻 Code avance';
+        }
+
+        function openApp() {
+            window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
+                '<!DOCTYPE html><html><head><style>body{margin:0;font-family:Arial;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;padding:20px}.box{max-width:1200px;margin:0 auto;background:white;border-radius:20px;padding:30px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}h1{color:#667eea;text-align:center;margin-bottom:30px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}.card{background:linear-gradient(135deg,#f8f9fa,#e9ecef);border:2px solid #dee2e6;border-radius:15px;padding:25px;text-align:center}.card h3{color:#667eea;font-size:1.5rem;margin-bottom:10px}.card p{font-size:2rem;font-weight:bold;color:#666}</style></head><body><div class="box"><h1>SUPER PROGRAMME</h1><div class="grid"><div class="card"><h3>X-ray API</h3><p>ACTIF</p></div><div class="card"><h3>Agent K</h3><p>CONNECTE</p></div><div class="card"><h3>Modules</h3><p>12</p></div><div class="card"><h3>Donnees</h3><p>1.2M</p></div></div></div></body></html>'
+            ), '_blank');
+        }
+
+        function openDash() {
+            window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
+                '<!DOCTYPE html><html><head><style>body{margin:0;font-family:Arial;background:#f5f7fa}.head{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;text-align:center}.main{max-width:1400px;margin:0 auto;padding:30px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}.stat{background:white;padding:25px;border-radius:15px;box-shadow:0 3px 15px rgba(0,0,0,0.1);text-align:center}.val{font-size:2.5rem;font-weight:bold;color:#667eea;margin:10px 0}</style></head><body><div class="head"><h1>DASHBOARD ANALYTICS</h1></div><div class="main"><div class="stats"><div class="stat"><div style="font-size:2rem">👥</div><div class="val">12,543</div><div>Utilisateurs</div></div><div class="stat"><div style="font-size:2rem">📈</div><div class="val">+24%</div><div>Croissance</div></div><div class="stat"><div style="font-size:2rem">💰</div><div class="val">45.2K</div><div>Revenus</div></div><div class="stat"><div style="font-size:2rem">⚡</div><div class="val">99.9%</div><div>Uptime</div></div></div></div></body></html>'
+            ), '_blank');
+        }
+
+        function openSite() {
+            window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
+                '<!DOCTYPE html><html><head><style>body{margin:0;font-family:Arial}.hero{background:linear-gradient(135deg,#667eea,#764ba2);color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}.hero h1{font-size:4rem;margin-bottom:20px}.hero p{font-size:1.5rem;margin-bottom:30px}.cta{background:white;color:#667eea;padding:20px 50px;border:none;border-radius:50px;font-size:1.2rem;font-weight:bold;cursor:pointer}.cta:hover{transform:scale(1.1)}</style></head><body><div class="hero"><div><h1>BIENVENUE</h1><p>Solution IA nouvelle generation</p><button class="cta">COMMENCER</button></div></div></body></html>'
+            ), '_blank');
+        }
+
+        document.getElementById('msg').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMsg();
+        });
+    </script>
+</body>
+</html>
